@@ -1,0 +1,122 @@
+// Rangganatha Siregar and Elaine Hsu
+// 13/04/2022
+// CS &142
+// Lab #1
+//
+// The purpose of this program is to allow the user to play a guessing game.
+// We got everything working perfectly.
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class Guess {
+
+   public static void main (String[] args)
+   {
+      int upperLimit = 100; 
+      instructions(upperLimit);      
+      int guesses = playGame(upperLimit);
+      int totalGuesses = guesses;
+      System.out.print("Do you want to play again? ");
+      char answer = userAnswer();
+      int totalGames = 1;
+      int bestGame = guesses;
+      while (answer == 'Y' || answer == 'y')
+      {
+         totalGames++;
+         int newGuesses = playGame(upperLimit);
+         totalGuesses = totalGuesses + newGuesses;
+         if (newGuesses < bestGame)
+         {
+            bestGame = newGuesses;
+         }
+         System.out.print("Do you want to play again? ");
+         answer = userAnswer();
+      }
+      if (answer == 'N' || answer == 'n')
+      {
+         printResults(totalGames, totalGuesses, bestGame);
+      }
+      else 
+      {
+         System.out.println("Invalid input. Run the program again.");
+      }
+   }
+   
+   public static char userAnswer()
+   {
+      Scanner userDecision = new Scanner(System.in);
+      String decision = userDecision.next();
+      char answer = decision.charAt(0);
+      return answer;
+   }
+   
+   public static void instructions(int upperLimit)
+   {
+      
+      System.out.println("This program allows you to play a guessing game.");
+      System.out.println("I will think of a number between 1-");
+      System.out.println((upperLimit-1) + " and will allow you to guess until you get it.");
+      System.out.println("For each guess, I will tell you");
+      System.out.println("whether the right answer is higher or lower");
+      System.out.println("than your guess.");
+   }
+   
+   public static int playGame(int upperLimit)
+   {
+      Random rand = new Random();
+      int computerNumber = rand.nextInt(upperLimit);
+      System.out.println();
+      System.out.println("I'm thinking of a number between 1 and " + (upperLimit-1) + "...");
+      System.out.print("Your guess? ");
+      Scanner sc = new Scanner(System.in);
+      String gues = sc.next();
+      int totalGuesses = 1;
+      try{
+          int guess = Integer.parseInt(gues);
+          while (guess != computerNumber)
+      {
+         totalGuesses++;
+         if (guess < 1 || guess > (upperLimit-1)) 
+         {
+            System.out.println("Invalid input.");
+         }
+         else if (guess < computerNumber)
+         {
+            System.out.println("It's higher.");
+         }
+         else if (guess > computerNumber)
+         {
+            System.out.println("It's lower.");
+         }
+         System.out.print("Your guess? ");
+         guess = sc.nextInt();
+      }
+      
+      if (guess == computerNumber)
+         {
+            if (totalGuesses == 1)
+            {
+            System.out.println("You got it right in " + totalGuesses + " guess");
+            }
+            else
+            {
+            System.out.println("You got it right in " + totalGuesses + " guesses.");
+            }
+         }
+      } catch(Exception e){
+        System.out.println("not a number please be careful next time");
+      }
+      return totalGuesses;
+   } 
+   
+   public static void printResults(double games, double guesses, int bestGame)
+      {
+         double avgGuess = guesses/games;
+         System.out.println("\nOverall results:");
+         System.out.printf("\ttotal games    = %.0f", games);
+         System.out.printf("\n\ttotal guesses  = %.0f", guesses);
+         System.out.printf("\n\tguesses/game   = %.1f", avgGuess);
+         System.out.println("\n\tbest game      = " + bestGame);
+      }
+}      
